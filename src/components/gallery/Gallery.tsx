@@ -4,15 +4,13 @@ import { useScroll, useTransform, motion } from "motion/react";
 import { useRef } from "react";
 import { cn } from "@/lib/utils";
 import { GalleryItem } from "./GalleryItem";
-
-import type { GalleryItem as ItemType } from "@/types";
+import type { NormalizedArtwork } from "@/types/artwork";
 
 interface Props {
-  items: ItemType[];
+  items: NormalizedArtwork[];
   className?: string;
   onDelete: (id: number) => void;
   onUpdateNote: (id: number, note: string) => void;
-  buildImageUrl: (id: string | null) => string;
 }
 
 export const Gallery = ({
@@ -20,7 +18,6 @@ export const Gallery = ({
   className,
   onDelete,
   onUpdateNote,
-  buildImageUrl,
 }: Props) => {
   const gridRef = useRef<HTMLDivElement>(null);
 
@@ -55,9 +52,9 @@ export const Gallery = ({
                 <motion.div key={idx} style={{ y: translate }}>
                   <div className="space-y-4">
                     <img
-                      src={buildImageUrl(item.image_id)}
+                      src={item.imageUrl}
                       className="h-80 w-full object-cover rounded-lg"
-                      alt={item.artwork.title}
+                      alt={item.title}
                     />
                     <GalleryItem
                       item={item}

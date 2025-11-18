@@ -1,13 +1,22 @@
-import { ArtworkSchema, type Artwork } from "../types/artwork";
+import {
+  ArtworkSchema,
+  type Artwork,
+  type NormalizedArtwork,
+} from "../types/artwork";
+import { normalizeArtwork } from "./normalize";
 
-export async function fetchArtworks(query: string): Promise<Artwork[]> {
+export async function fetchArtworks(
+  query: string
+): Promise<NormalizedArtwork[]> {
   if (!query.trim()) return [];
 
   const searchUrl = new URL("https://api.artic.edu/api/v1/artworks/search");
 
-  // Request only the fields you care about
   searchUrl.searchParams.set("q", query);
-  searchUrl.searchParams.set("fields", "id,title,artist_title,image_id");
+  searchUrl.searchParams.set(
+    "fields",
+    "id,title,artist_title,artist_display,image_id,thumbnail"
+  );
 
   const res = await fetch(searchUrl.toString());
 
@@ -29,6 +38,5 @@ export async function fetchArtworks(query: string): Promise<Artwork[]> {
       console.warn("Invalid artwork skipped:", err);
     }
   }
-
-  return validated;
+  return validated.map(normalizeArtwork);
 }

@@ -1,36 +1,40 @@
+"use client";
+
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import type { NormalizedArtwork } from "@/types/artwork";
+import type { ArtworkNote } from "@/types/note";
 
-import type { GalleryItem as ItemType } from "@/types";
+export interface GalleryArtwork extends NormalizedArtwork {
+  note: ArtworkNote["note"] | string;
+}
 
 interface Props {
-  item: ItemType;
+  item: GalleryArtwork;
   onDelete: (id: number) => void;
   onUpdateNote: (id: number, note: string) => void;
 }
 
 export function GalleryItem({ item, onDelete, onUpdateNote }: Props) {
-  const { artwork, note } = item;
-
   return (
     <Card className="rounded-lg overflow-hidden">
       <CardHeader>
-        <h3 className="font-bold text-lg leading-tight">{artwork.title}</h3>
-        <p className="text-sm text-muted-foreground">{artwork.artist_title}</p>
+        <h3 className="font-bold text-lg leading-tight">{item.title}</h3>
+        <p className="text-sm text-muted-foreground">{item.artist}</p>
       </CardHeader>
 
       <CardContent className="space-y-4">
         <Textarea
-          defaultValue={note}
+          defaultValue={item.note}
           placeholder="Add a note..."
-          onBlur={(e) => onUpdateNote(artwork.id, e.target.value)}
+          onBlur={(e) => onUpdateNote(item.id, e.target.value)}
         />
 
         <Button
           variant="destructive"
           className="w-full"
-          onClick={() => onDelete(artwork.id)}
+          onClick={() => onDelete(item.id)}
         >
           Remove From Gallery
         </Button>
