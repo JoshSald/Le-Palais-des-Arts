@@ -1,9 +1,9 @@
 import z from "zod";
-import { ArtworkSchema } from "./artwork";
+import { NormalizedArtworkSchema } from "./artwork";
 import { NoteSchema } from "./note";
 
 export const GalleryItemSchema = z.object({
-  artwork: ArtworkSchema,
+  artwork: NormalizedArtworkSchema,
   note: NoteSchema.shape.note,
   savedAt: z.string().optional(), // ISO string (optional)
 });
