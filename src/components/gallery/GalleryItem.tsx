@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import { CardHeader, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import type { NormalizedArtwork } from "@/types/artwork";
@@ -18,13 +18,13 @@ interface Props {
 
 export function GalleryItem({ item, onDelete, onUpdateNote }: Props) {
   return (
-    <Card className="rounded-lg overflow-hidden">
+    <div className="rounded-lg overflow-hidden">
       <CardHeader>
         <h3 className="font-bold text-lg leading-tight">{item.title}</h3>
         <p className="text-sm text-muted-foreground">{item.artist}</p>
       </CardHeader>
 
-      <CardContent className="space-y-4">
+      {/* <CardContent className="space-y-4">
         <Textarea
           defaultValue={item.note}
           placeholder="Add a note..."
@@ -38,7 +38,7 @@ export function GalleryItem({ item, onDelete, onUpdateNote }: Props) {
         >
           Remove From Gallery
         </Button>
-      </CardContent>
-    </Card>
+      </CardContent> */}
+    </div>
   );
 }

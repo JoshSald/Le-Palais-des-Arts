@@ -3,7 +3,7 @@ import { z } from "zod";
 export const ArtworkSchema = z.object({
   id: z.number(),
   title: z.string().optional().default("Untitled"),
-  artist_title: z.string().optional(),
+  artist_title: z.string().nullable().optional(),
   artist_display: z.string().optional(),
   image_id: z.string().nullable().optional(),
   thumbnail: z

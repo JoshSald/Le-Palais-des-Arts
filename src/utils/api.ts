@@ -6,7 +6,9 @@ import {
 import { normalizeArtwork } from "./normalize";
 
 export async function fetchArtworks(
-  query: string
+  query: string,
+  page: number = 1,
+  limit: number = 12
 ): Promise<NormalizedArtwork[]> {
   if (!query.trim()) return [];
 
@@ -17,6 +19,8 @@ export async function fetchArtworks(
     "fields",
     "id,title,artist_title,artist_display,image_id,thumbnail"
   );
+  searchUrl.searchParams.set("page", page.toString());
+  searchUrl.searchParams.set("limit", limit.toString());
 
   const res = await fetch(searchUrl.toString());
 
@@ -38,5 +42,6 @@ export async function fetchArtworks(
       console.warn("Invalid artwork skipped:", err);
     }
   }
+
   return validated.map(normalizeArtwork);
 }

@@ -1,10 +1,11 @@
 "use client";
 
 import { useScroll, useTransform, motion } from "motion/react";
-import { useRef } from "react";
 import { cn } from "@/lib/utils";
 import { GalleryItem } from "./GalleryItem";
+import { Card } from "../ui/card";
 import type { NormalizedArtwork } from "@/types/artwork";
+import { ImageZoom } from "../ui/shadcn-io/image-zoom";
 
 interface Props {
   items: NormalizedArtwork[];
@@ -19,12 +20,8 @@ export const Gallery = ({
   onDelete,
   onUpdateNote,
 }: Props) => {
-  const gridRef = useRef<HTMLDivElement>(null);
-
-  const { scrollYProgress } = useScroll({
-    container: gridRef,
-    offset: ["start start", "end start"],
-  });
+  // Listen to WINDOW scroll instead of container scroll
+  const { scrollYProgress } = useScroll();
 
   const translateFirst = useTransform(scrollYProgress, [0, 1], [0, -200]);
   const translateSecond = useTransform(scrollYProgress, [0, 1], [0, 200]);
@@ -36,10 +33,7 @@ export const Gallery = ({
   const thirdPart = items.slice(2 * third);
 
   return (
-    <div
-      className={cn("h-[40rem] overflow-y-auto w-full", className)}
-      ref={gridRef}
-    >
+    <div className={cn("w-full", className)}>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto gap-10 py-40 px-10">
         {[firstPart, secondPart, thirdPart].map((column, colIdx) => {
           const translate = [translateFirst, translateSecond, translateThird][
@@ -50,18 +44,21 @@ export const Gallery = ({
             <div className="grid gap-10" key={colIdx}>
               {column.map((item, idx) => (
                 <motion.div key={idx} style={{ y: translate }}>
-                  <div className="space-y-4">
-                    <img
-                      src={item.imageUrl}
-                      className="h-80 w-full object-cover rounded-lg"
-                      alt={item.title}
-                    />
+                  <Card className="py-0 pb-6">
+                    <ImageZoom>
+                      <img
+                        src={item.imageUrl}
+                        className="h-80 w-full object-cover rounded-lg"
+                        alt={item.title}
+                        loading="lazy"
+                      />
+                    </ImageZoom>
                     <GalleryItem
                       item={item}
                       onDelete={onDelete}
                       onUpdateNote={onUpdateNote}
                     />
-                  </div>
+                  </Card>
                 </motion.div>
               ))}
             </div>
