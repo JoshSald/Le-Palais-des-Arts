@@ -5,6 +5,7 @@ import { fetchArtworks } from "./utils/api";
 import InfiniteScroll from "@/components/ui/infiniteScroll";
 import Navbar from "./components/Navbar";
 import { Gallery } from "./components/gallery/Gallery";
+import { GalleryDrawer } from "./components/myGallery/MyGallery";
 import { Spinner } from "./components/ui/spinner";
 
 import type { NormalizedArtwork } from "./types/artwork";
@@ -84,14 +85,13 @@ export default function App() {
                 <Spinner />
               </div>
             )}
-            <h2 className="mt-10 text-xl font-bold">My Gallery</h2>
-            <Gallery
-              items={gallery}
-              onDelete={handleDelete}
-              onUpdateNote={handleUpdateNote}
-            />
           </div>
         </section>
+        <GalleryDrawer
+          items={gallery}
+          onDelete={handleDelete}
+          onUpdateNote={handleUpdateNote}
+        />
       </main>
     </>
   );

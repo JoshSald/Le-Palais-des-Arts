@@ -18,12 +18,7 @@ interface Props {
   onArtistClick: (artist: string) => void;
 }
 
-export function GalleryItem({
-  item,
-  onDelete,
-  onUpdateNote,
-  onArtistClick,
-}: Props) {
+export function GalleryItem({ item, onArtistClick }: Props) {
   return (
     <div className="rounded-lg overflow-hidden">
       <CardHeader>
@@ -36,22 +31,6 @@ export function GalleryItem({
         </span>
         `
       </CardHeader>
-
-      {/* <CardContent className="space-y-4">
-        <Textarea
-          defaultValue={item.note}
-          placeholder="Add a note..."
-          onBlur={(e) => onUpdateNote(item.id, e.target.value)}
-        />
-
-        <Button
-          variant="destructive"
-          className="w-full"
-          onClick={() => onDelete(item.id)}
-        >
-          Remove From Gallery
-        </Button>
-      </CardContent> */}
     </div>
   );
 }
