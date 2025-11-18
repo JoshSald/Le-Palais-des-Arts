@@ -17,6 +17,7 @@ export async function fetchArtworks(
     "fields",
     "id,title,artist_title,artist_display,image_id,thumbnail"
   );
+  searchUrl.searchParams.set("limit", "50");
 
   const res = await fetch(searchUrl.toString());
 
