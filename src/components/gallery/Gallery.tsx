@@ -12,6 +12,7 @@ interface Props {
   className?: string;
   onDelete: (id: number) => void;
   onUpdateNote: (id: number, note: string) => void;
+  onArtistClick: (artist: string) => void;
 }
 
 export const Gallery = ({
@@ -19,6 +20,7 @@ export const Gallery = ({
   className,
   onDelete,
   onUpdateNote,
+  onArtistClick,
 }: Props) => {
   // Listen to WINDOW scroll instead of container scroll
   const { scrollYProgress } = useScroll();
@@ -57,6 +59,7 @@ export const Gallery = ({
                       item={item}
                       onDelete={onDelete}
                       onUpdateNote={onUpdateNote}
+                      onArtistClick={onArtistClick}
                     />
                   </Card>
                 </motion.div>

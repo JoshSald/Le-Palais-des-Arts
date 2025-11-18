@@ -75,7 +75,10 @@ export function SearchBar({ onSearch, onSelect }: Props) {
   };
 
   return (
-    <div ref={wrapperRef} className="relative max-w-md mx-auto my-8">
+    <div
+      ref={wrapperRef}
+      className="relative bg-white/70 max-w-md mx-auto my-8 rounded-md"
+    >
       <Input
         placeholder="Search for an artist or artwork…"
         value={query}

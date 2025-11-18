@@ -8,13 +8,19 @@ import { normalizeArtwork } from "./normalize";
 export async function fetchArtworks(
   query: string,
   page: number = 1,
-  limit: number = 12
+  limit: number = 12,
+  artist?: string
 ): Promise<NormalizedArtwork[]> {
-  if (!query.trim()) return [];
+  if (!query.trim() && !artist) return [];
 
   const searchUrl = new URL("https://api.artic.edu/api/v1/artworks/search");
 
-  searchUrl.searchParams.set("q", query);
+  if (artist) {
+    searchUrl.searchParams.set("query[term][artist_title]", artist);
+  } else {
+    searchUrl.searchParams.set("q", query);
+  }
+
   searchUrl.searchParams.set(
     "fields",
     "id,title,artist_title,artist_display,image_id,thumbnail"

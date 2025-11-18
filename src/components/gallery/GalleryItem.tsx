@@ -3,6 +3,7 @@
 import { CardHeader, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { fetchArtworks } from "@/utils/api";
 import type { NormalizedArtwork } from "@/types/artwork";
 import type { ArtworkNote } from "@/types/note";
 
@@ -14,14 +15,26 @@ interface Props {
   item: GalleryArtwork;
   onDelete: (id: number) => void;
   onUpdateNote: (id: number, note: string) => void;
+  onArtistClick: (artist: string) => void;
 }
 
-export function GalleryItem({ item, onDelete, onUpdateNote }: Props) {
+export function GalleryItem({
+  item,
+  onDelete,
+  onUpdateNote,
+  onArtistClick,
+}: Props) {
   return (
     <div className="rounded-lg overflow-hidden">
       <CardHeader>
         <h3 className="font-bold text-lg leading-tight">{item.title}</h3>
-        <p className="text-sm text-muted-foreground">{item.artist}</p>
+        <span
+          className="text-sm text-red-600 cursor-pointer hover:underline"
+          onClick={() => onArtistClick(item.artist)}
+        >
+          {item.artist}
+        </span>
+        `
       </CardHeader>
 
       {/* <CardContent className="space-y-4">
