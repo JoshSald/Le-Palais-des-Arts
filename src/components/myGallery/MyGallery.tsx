@@ -1,5 +1,7 @@
 "use client";
 
+import SadOmlette from "@/assets/sad_omlette_nobg.png";
+
 import {
   Drawer,
   DrawerTrigger,
@@ -44,12 +46,17 @@ export function GalleryDrawer({ items, onDelete, onUpdateNote }: Props) {
           <DrawerTitle className="text-xl font-bold">My Gallery</DrawerTitle>
         </DrawerHeader>
 
-        <div className="overflow-y-auto px-4 pb-8 max-h-[70vh]">
+        <div className="overflow-y-auto px-4 pb-12 max-h-[70vh]">
           {items.length < 1 ? (
-            <p className="text-center text-black/60">
-              Monsieur Saucisse Juteuse Omelette is disappointed. Your Gallery
-              is empty
-            </p>
+            <div className="content flex flex-col items-center">
+              <p className="text-center text-black/60 mt-6">
+                Monsieur Saucisse Juteuse Omelette is disappointed...
+              </p>
+              <img className="max-w-1/4" src={SadOmlette} alt="Sad Omlette" />
+              <p className="text-center text-black/60 mt-6">
+                Your Gallery is empty
+              </p>
+            </div>
           ) : (
             <Gallery
               items={items}
