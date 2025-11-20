@@ -9,16 +9,22 @@ export async function fetchArtworks(
   query: string,
   page: number = 1,
   limit: number = 12,
-  artist?: string
+  artist?: string,
+  savedIds?: number[]
 ): Promise<NormalizedArtwork[]> {
   if (!query.trim() && !artist) return [];
 
   const searchUrl = new URL("https://api.artic.edu/api/v1/artworks/search");
 
-  if (artist) {
+  if (savedIds?.length) {
+    const ids = savedIds.join(",");
+    searchUrl.searchParams.set("ids", ids);
+  } else if (artist) {
     searchUrl.searchParams.set("query[term][artist_title]", artist);
-  } else {
+  } else if (query.trim()) {
     searchUrl.searchParams.set("q", query);
+  } else {
+    return [];
   }
 
   searchUrl.searchParams.set(
