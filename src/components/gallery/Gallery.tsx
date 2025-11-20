@@ -3,9 +3,7 @@
 import { useScroll, useTransform, motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { GalleryItem } from "./GalleryItem";
-import { Card } from "../ui/card";
 import type { NormalizedArtwork } from "@/types/artwork";
-import { ImageZoom } from "../ui/shadcn-io/image-zoom";
 
 interface Props {
   items: NormalizedArtwork[];
@@ -22,7 +20,6 @@ export const Gallery = ({
   onUpdateNote,
   onArtistClick,
 }: Props) => {
-  // Listen to WINDOW scroll instead of container scroll
   const { scrollYProgress } = useScroll();
 
   const translateFirst = useTransform(scrollYProgress, [0, 1], [0, -200]);
@@ -46,22 +43,12 @@ export const Gallery = ({
             <div className="grid gap-10" key={colIdx}>
               {column.map((item, idx) => (
                 <motion.div key={idx} style={{ y: translate }}>
-                  <Card className="py-0 pb-6">
-                    <ImageZoom>
-                      <img
-                        src={item.imageUrl}
-                        className="h-80 w-full object-cover rounded-lg"
-                        alt={item.title}
-                        loading="lazy"
-                      />
-                    </ImageZoom>
-                    <GalleryItem
-                      item={item}
-                      onDelete={onDelete}
-                      onUpdateNote={onUpdateNote}
-                      onArtistClick={onArtistClick}
-                    />
-                  </Card>
+                  <GalleryItem
+                    item={item}
+                    onDelete={onDelete}
+                    onUpdateNote={onUpdateNote}
+                    onArtistClick={onArtistClick}
+                  />
                 </motion.div>
               ))}
             </div>
