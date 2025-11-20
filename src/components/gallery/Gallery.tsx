@@ -2,23 +2,23 @@
 
 import { useScroll, useTransform, motion } from "motion/react";
 import { cn } from "@/lib/utils";
-import { GalleryItem } from "./GalleryItem";
+import { GalleryItem, type GalleryArtwork } from "./GalleryItem";
 import type { NormalizedArtwork } from "@/types/artwork";
 
 interface Props {
-  items: NormalizedArtwork[];
+  items: NormalizedArtwork[]; // API search results or preloaded gallery
+  gallery?: GalleryArtwork[]; // saved items
   className?: string;
-  onDelete: (id: number) => void;
-  onUpdateNote: (id: number, note: string) => void;
   onArtistClick: (artist: string) => void;
+  onToggleGallery?: (item: NormalizedArtwork) => void; // for hearts
 }
 
 export const Gallery = ({
   items,
+  gallery = [],
   className,
-  onDelete,
-  onUpdateNote,
   onArtistClick,
+  onToggleGallery,
 }: Props) => {
   const { scrollYProgress } = useScroll();
 
@@ -41,16 +41,25 @@ export const Gallery = ({
 
           return (
             <div className="grid gap-10" key={colIdx}>
-              {column.map((item, idx) => (
-                <motion.div key={idx} style={{ y: translate }}>
-                  <GalleryItem
-                    item={item}
-                    onDelete={onDelete}
-                    onUpdateNote={onUpdateNote}
-                    onArtistClick={onArtistClick}
-                  />
-                </motion.div>
-              ))}
+              {column.map((item) => {
+                const savedItem = gallery.find((a) => a.id === item.id);
+
+                return (
+                  <motion.div key={item.id} style={{ y: translate }}>
+                    <GalleryItem
+                      item={{ ...item, note: savedItem?.note || "" }}
+                      onArtistClick={onArtistClick}
+                      inGallery={!!savedItem}
+                      onToggleGallery={
+                        onToggleGallery
+                          ? () => onToggleGallery(item)
+                          : undefined
+                      }
+                      mode={onToggleGallery ? "main" : "drawer"} // <-- important
+                    />
+                  </motion.div>
+                );
+              })}
             </div>
           );
         })}

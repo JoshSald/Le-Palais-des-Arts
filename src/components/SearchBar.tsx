@@ -3,9 +3,9 @@
 import {
   useState,
   useEffect,
+  useRef,
   type ChangeEvent,
   type KeyboardEvent,
-  useRef,
 } from "react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -15,31 +15,29 @@ import { fetchArtworks } from "@/utils/api";
 interface Props {
   onSearch: (query: string) => void;
   onSelect: (item: NormalizedArtwork) => void;
+  debounceMs?: number;
 }
 
-export function SearchBar({ onSearch, onSelect }: Props) {
+export function SearchBar({ onSearch, onSelect, debounceMs = 300 }: Props) {
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState<NormalizedArtwork[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
-
   const wrapperRef = useRef<HTMLDivElement | null>(null);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Close dropdown when clicking outside
   useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
+    const handleClickOutside = (e: MouseEvent) => {
       if (
         wrapperRef.current &&
         !wrapperRef.current.contains(e.target as Node)
       ) {
         setShowDropdown(false);
       }
-    }
-
+    };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Debounced lookup for suggestions
   useEffect(() => {
     if (!query.trim()) {
       setSuggestions([]);
@@ -47,14 +45,18 @@ export function SearchBar({ onSearch, onSelect }: Props) {
       return;
     }
 
-    const timer = setTimeout(async () => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+
+    debounceRef.current = setTimeout(async () => {
       const res = await fetchArtworks(query);
       setSuggestions(res);
       setShowDropdown(res.length > 0);
-    }, 300);
+    }, debounceMs);
 
-    return () => clearTimeout(timer);
-  }, [query]);
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, [query, debounceMs]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
@@ -71,6 +73,7 @@ export function SearchBar({ onSearch, onSelect }: Props) {
   const handleSelect = (art: NormalizedArtwork) => {
     onSelect(art);
     setQuery("");
+    setSuggestions([]);
     setShowDropdown(false);
   };
 
@@ -79,16 +82,16 @@ export function SearchBar({ onSearch, onSelect }: Props) {
       ref={wrapperRef}
       className="relative bg-white/70 max-w-md mx-auto my-8 rounded-md"
     >
-      <div className="search">
-        <Input
-          id="search"
-          name="search"
-          placeholder="Search for an artist or artwork…"
-          value={query}
-          onChange={handleChange}
-          onKeyDown={handleKeyDown}
-        />
-      </div>
+      <Input
+        id="search"
+        name="search"
+        placeholder="Search for an artist or artwork…"
+        value={query}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
+        autoComplete="off"
+      />
+
       {showDropdown && suggestions.length > 0 && (
         <ul className="absolute z-10 w-full bg-white shadow-md rounded-md mt-1 max-h-60 overflow-auto">
           {suggestions.map((art) => (
