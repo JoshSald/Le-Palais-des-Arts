@@ -3,7 +3,7 @@ import SpinnerImage from "/spinnerimg.png";
 
 import { cn } from "@/lib/utils";
 
-function Spinner({ className, ...props }: React.ComponentProps<"svg">) {
+function Spinner({ className, ...props }: React.ComponentProps<"img">) {
   return (
     <img
       src={SpinnerImage}

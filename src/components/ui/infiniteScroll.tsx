@@ -18,7 +18,6 @@ export default function InfiniteScroll({
   threshold = 1,
   root = null,
   rootMargin = "0px",
-  reverse,
   children,
 }: InfiniteScrollProps) {
   const sentinelRef = React.useRef<HTMLDivElement>(null);
