@@ -79,13 +79,16 @@ export function SearchBar({ onSearch, onSelect }: Props) {
       ref={wrapperRef}
       className="relative bg-white/70 max-w-md mx-auto my-8 rounded-md"
     >
-      <Input
-        placeholder="Search for an artist or artwork…"
-        value={query}
-        onChange={handleChange}
-        onKeyDown={handleKeyDown}
-      />
-
+      <div className="search">
+        <Input
+          id="search"
+          name="search"
+          placeholder="Search for an artist or artwork…"
+          value={query}
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
+        />
+      </div>
       {showDropdown && suggestions.length > 0 && (
         <ul className="absolute z-10 w-full bg-white shadow-md rounded-md mt-1 max-h-60 overflow-auto">
           {suggestions.map((art) => (
