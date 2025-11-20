@@ -1,8 +1,10 @@
 "use client";
 
+import type { Transition } from "framer-motion";
 import { useState, useEffect } from "react";
 import { motion, useScroll } from "framer-motion";
 import { SearchBar } from "./SearchBar";
+import { type NormalizedArtwork } from "@/types/artwork";
 
 interface NavbarProps {
   onSearch: (query: string) => void;
@@ -14,10 +16,11 @@ export default function Navbar({ onSearch, onSelect }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    return scrollY.onChange((y) => setScrolled(y > 50));
+    const unsubscribe = scrollY.on("change", (y) => setScrolled(y > 50));
+    return () => unsubscribe();
   }, [scrollY]);
 
-  const transition = {
+  const transition: Transition = {
     type: "spring",
     stiffness: 180,
     damping: 25,
@@ -30,7 +33,7 @@ export default function Navbar({ onSearch, onSelect }: NavbarProps) {
       className={`fixed top-0 left-0 w-full px-6 transition-colors z-50
         ${
           scrolled
-            ? "h-20 bg-gradient-to-b from-black/30 to-white/60 backdrop-blur-lg shadow-[0_4px_20px_rgba(0,0,0,0.08)] flex items-center justify-between"
+            ? "h-20 bg-linear-to-b from-black/30 to-white/60 backdrop-blur-lg shadow-[0_4px_20px_rgba(0,0,0,0.08)] flex items-center justify-between"
             : "h-28 bg-transparent flex flex-col items-center pt-6"
         }`}
       initial={false}
